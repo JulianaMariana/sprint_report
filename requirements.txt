@@ -1,0 +1,14 @@
+dash
+dash-bootstrap-components
+dash-daq
+dash-ag-grid
+
+pandas
+jupyterlab
+openpyxl
+matplotlib
+unidecode
+
+black
+flake8
+isort
