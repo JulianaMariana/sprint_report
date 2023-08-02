@@ -3,6 +3,7 @@ import sys
 sys.path.insert(0, "..")
 
 import os
+from datetime import datetime
 
 import pandas as pd
 
@@ -18,6 +19,9 @@ def limite_hours(dataframe, start_sprint, end_sprint, limit_hour_report="12:00")
     df_limite_hours["Date"] = dates_str
     for name in dataframe["Assignee"].unique().tolist():
         df_limite_hours[name] = limit_hour_report
+
+        if name == "Juliana Mariana Macedo Araujo":
+            df_limite_hours[name] = "09:30"
 
     return limit_hour_report, df_limite_hours
 
@@ -80,5 +84,5 @@ def get_last_file(sprint_name):
                 path = path.strip("Jira_").strip(".csv")
                 res.append(path)
 
-    res.sort()
+    res.sort(key=lambda res: datetime.strptime(res, "%d-%m-%y"))
     return res[-1]
