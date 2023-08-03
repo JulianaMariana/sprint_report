@@ -1,57 +1,4 @@
-import os
-from datetime import datetime, timedelta
-
-import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
-from unidecode import unidecode
-
-
-############################# INIT DEPRECATED  ######################
-def get_project_dataframe_by_task(data):
-    df = data.copy()
-
-    columns_filter = [
-        "Assignee",
-        "Summary",
-        "Issue key",
-        "Issue Type",
-        "Status",
-        "Original estimate",
-        "Time Spent Sprint",
-        "Total Time Spent",
-        "Init Spent Date",
-        "Original Sprint",
-    ]
-    df = df.loc[:, columns_filter]
-    return df
-
-
-def get_task_times_by_project_order(data, sorted_issues):
-    df = get_project_dataframe_by_task(data)
-
-    da = df.copy()
-
-    col_issues = da["Issue key"]
-    for i, issue in enumerate(sorted_issues):
-        if issue in col_issues.to_list():
-            index = col_issues[col_issues == issue].index[0]
-            da.at[index, "order"] = i
-
-    order_value = len(sorted_issues)
-    for index in (da["order"][da["order"].isnull().values.tolist()]).index:
-        da.at[index, "order"] = order_value
-        order_value = order_value + 1
-
-    da = da.sort_values(by=["order"])
-    da = da.astype({"order": "int"})
-    da = da.set_index("order")
-    da = da.reset_index(names=["order"], drop=True)
-
-    return da
-
-
-############################# END DEPRECATED  ######################
 
 
 class PrepareDatafromExcel:
@@ -156,6 +103,7 @@ class PrepareDatafromExcel:
         sorted_issues = df_excel_plan["Issue key"].to_list()
 
         col_issues = da["Issue key"]
+        da["order"] = 0
         for i, issue in enumerate(sorted_issues):
             if issue in col_issues.to_list():
                 index = col_issues[col_issues == issue].index[0]
